@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "951235233149",
+    "project_id": "elrahman-notes-app",
+    "storage_bucket": "elrahman-notes-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951235233149:android:3a71d08f76dd90c96bb814",
+        "android_client_info": {
+          "package_name": "com.elrahman.notes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaUI0BMSQ81fe0IitVwrLXHFdSu8mHqvo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

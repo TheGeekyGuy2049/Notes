@@ -44,50 +44,61 @@ class _LoginViewState extends State<LoginView> {
         builder: (context, snapshot) {
           switch(snapshot.connectionState) {
             case ConnectionState.done:
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextField(
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    keyboardType: TextInputType.emailAddress,
-                    controller: _email,
-                    decoration: const InputDecoration(
-                        hintText: "Email"
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextField(
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _email,
+                      decoration: const InputDecoration(
+                          filled: true,
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.email),
+                          hintText: "Email"
+                      ),
                     ),
-                  ),
-                  TextField(
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    controller: _password,
-                    decoration: const InputDecoration(
-                        hintText: "Password"
+                    const SizedBox(height: 15),
+                    TextField(
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      controller: _password,
+                      decoration: const InputDecoration(
+                          filled: true,
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.password),
+                          hintText: "Password"
+                      ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () async{
-                      final email = _email.text;
-                      final password = _password.text;
-                      try{
-                        await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: email,
-                            password: password
-                        );
-                      }
-                      on FirebaseAuthException catch (e){
-                        if (e.code == 'invalid-credential') {
-                          Fluttertoast.showToast(msg: "User not found!");
+                    const SizedBox(height: 15),
+                    FilledButton(
+                      onPressed: () async{
+                        final email = _email.text;
+                        final password = _password.text;
+                        try{
+                          await FirebaseAuth.instance.signInWithEmailAndPassword(
+                              email: email,
+                              password: password
+                          );
                         }
-                        else if(e.code == 'invalid-email') {
-                          Fluttertoast.showToast(msg: "This isn't an Email!");
+                        on FirebaseAuthException catch (e){
+                          if (e.code == 'invalid-credential') {
+                            Fluttertoast.showToast(msg: "User not found!");
+                          }
+                          else if(e.code == 'invalid-email') {
+                            Fluttertoast.showToast(msg: "This isn't an Email!");
+                          }
                         }
-                      }
-                    },
-                    child: const Text("Login"),
-                  ),
-                ],
+                      },
+                      child: const Text("Login"),
+                    ),
+                  ],
+                ),
               );
             default: return const Text("Loading...");
           }

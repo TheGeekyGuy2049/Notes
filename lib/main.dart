@@ -17,7 +17,7 @@ void main() {
             colorScheme: darkColorScheme ?? defaultLightColorScheme,
             useMaterial3: true,
           ),
-          home:  const LoginView(),
+          home:  const HomePage(),
         );
       }
       )
@@ -41,21 +41,59 @@ class HomePage extends StatelessWidget {
         builder: (context, snapshot) {
           switch(snapshot.connectionState) {
             case ConnectionState.done:
-              final user = FirebaseAuth.instance.currentUser;
-              if (user!.emailVerified){
-                print("You are a verified user!");
-              }
-              else {
-                print("You aren't a verified user. You need to verify your email first!");
-              }
-              return const Text("Done");
-            default: return const Text("Loading...");
+              // final user = FirebaseAuth.instance.currentUser;
+              // if (user?.emailVerified ?? false){
+              //   return const Text("Done");
+              // }
+              // else {
+              //   return const VerfiyEmailView();
+              // }
+              return const LoginView();
+            default:
+              return const Text("Loading...");
           }
         },
       ),
     );
   }
 }
+
+class VerfiyEmailView extends StatefulWidget {
+  const VerfiyEmailView({super.key});
+
+  @override
+  State<VerfiyEmailView> createState() => _VerfiyEmailViewState();
+}
+
+class _VerfiyEmailViewState extends State<VerfiyEmailView> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Center(
+          child: Text(
+            "Please verify your email: ",
+            style: TextStyle(
+                fontSize: 25
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        FilledButton(
+          onPressed: () async {
+            final user = FirebaseAuth.instance.currentUser;
+            await user?.sendEmailVerification();
+          },
+          child: const Text("Send Email Verification"),
+        )
+      ],
+    );
+  }
+}
+
+
 
 
 

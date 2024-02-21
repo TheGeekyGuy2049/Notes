@@ -59,6 +59,7 @@ class _RegisterViewState extends State<RegisterView> {
                           filled: true,
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.email),
+                          labelText: "Email",
                           hintText: "Email"
                       ),
                     ),
@@ -72,6 +73,7 @@ class _RegisterViewState extends State<RegisterView> {
                           filled: true,
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.password),
+                          labelText: "Password",
                           hintText: "Password"
                       ),
                     ),

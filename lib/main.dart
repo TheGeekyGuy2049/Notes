@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:notes/Views/login_view.dart';
+import 'package:notes/Views/register_view.dart';
 
 import 'firebase_options.dart';
 
@@ -15,7 +17,7 @@ void main() {
             colorScheme: darkColorScheme ?? defaultLightColorScheme,
             useMaterial3: true,
           ),
-          home:  const HomePage(),
+          home:  const LoginView(),
         );
       }
       )

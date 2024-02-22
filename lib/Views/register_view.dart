@@ -30,66 +30,79 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          TextField(
-            enableSuggestions: false,
-            autocorrect: false,
-            keyboardType: TextInputType.emailAddress,
-            controller: _email,
-            decoration: const InputDecoration(
-                filled: true,
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
-                labelText: "Email",
-                hintText: "Email"
+    return Scaffold(
+      appBar: AppBar(
+          title: const Center(child: Text("Register"),),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TextField(
+              enableSuggestions: false,
+              autocorrect: false,
+              keyboardType: TextInputType.emailAddress,
+              controller: _email,
+              decoration: const InputDecoration(
+                  filled: true,
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.email),
+                  labelText: "Email",
+                  hintText: "Email"
+              ),
             ),
-          ),
-          const SizedBox(height: 15),
-          TextField(
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            controller: _password,
-            decoration: const InputDecoration(
-                filled: true,
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.password),
-                labelText: "Password",
-                hintText: "Password"
+            const SizedBox(height: 15),
+            TextField(
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              controller: _password,
+              decoration: const InputDecoration(
+                  filled: true,
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.password),
+                  labelText: "Password",
+                  hintText: "Password"
+              ),
             ),
-          ),
-          const SizedBox(height: 15),
-          FilledButton(
-            onPressed: () async{
-              final email = _email.text;
-              final password = _password.text;
-              try{
-                await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                    email: email,
-                    password: password
-                );
-              }
-              on FirebaseAuthException catch (e){
-                print(e.code);
-                if (e.code == 'invalid-email') {
-                  Fluttertoast.showToast(msg: "This isn't an Email!");
+            const SizedBox(height: 15),
+            FilledButton(
+              onPressed: () async{
+                final email = _email.text;
+                final password = _password.text;
+                try{
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: email,
+                      password: password
+                  );
+                  Navigator.of(context).pushNamedAndRemoveUntil('/verify/', (route) => false);
                 }
-                else if(e.code == 'email-already-in-use') {
-                  Fluttertoast.showToast(msg: "Email already in use!!");
-                }
-                else if(e.code == 'weak-password') {
-                  Fluttertoast.showToast(msg: "Choose a stronger password!");
-                }
-              }
-            },
-            child: const Text("Register"),
-          ),
-        ],
+                on FirebaseAuthException catch (e){
+                  if (e.code == 'invalid-email') {
+                    Fluttertoast.showToast(msg: "This isn't an Email!");
+                  }
+                  else if(e.code == 'email-already-in-use') {
+                    Fluttertoast.showToast(msg: "Email already in use!!");
+                  }
+                  else if(e.code == 'weak-password') {
+                    Fluttertoast.showToast(msg: "Choose a stronger password!");
+                  }
+                };
+                },
+              child: const Text("Register"),
+            ),
+            const SizedBox(height: 15),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false);
+                  },
+                child: const Text("Already registered? Login here!"),
+            )
+          ],
+        ),
       ),
     );
   }

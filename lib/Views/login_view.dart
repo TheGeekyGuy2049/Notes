@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import '../firebase_options.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -30,64 +31,89 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          TextField(
-            enableSuggestions: false,
-            autocorrect: false,
-            keyboardType: TextInputType.emailAddress,
-            controller: _email,
-            decoration: const InputDecoration(
-                filled: true,
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
-                labelText: "Email",
-                hintText: "Email"
-            ),
-          ),
-          const SizedBox(height: 15),
-          TextField(
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            controller: _password,
-            decoration: const InputDecoration(
-                filled: true,
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.password),
-                labelText: "Password",
-                hintText: "Password"
-            ),
-          ),
-          const SizedBox(height: 15),
-          FilledButton(
-            onPressed: () async{
-              final email = _email.text;
-              final password = _password.text;
-              try{
-                final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                    email: email,
-                    password: password
-                );
-                print(userCredential);
-              }
-              on FirebaseAuthException catch (e){
-                if (e.code == 'invalid-credential') {
-                  Fluttertoast.showToast(msg: "User not found!");
-                }
-                else if(e.code == 'invalid-email') {
-                  Fluttertoast.showToast(msg: "This isn't an Email!");
-                }
-              }
-            },
-            child: const Text("Login"),
-          ),
-        ],
+    return FutureBuilder(
+      future: Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
       ),
+      builder: (context, snapshot) {
+        switch(snapshot.connectionState) {
+          case ConnectionState.done:
+            return Scaffold(
+              appBar: AppBar(
+                title: const Center(child: Text("Login"),),
+                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextField(
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _email,
+                      decoration: const InputDecoration(
+                          filled: true,
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.email),
+                          labelText: "Email",
+                          hintText: "Email"
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    TextField(
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      controller: _password,
+                      decoration: const InputDecoration(
+                          filled: true,
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.password),
+                          labelText: "Password",
+                          hintText: "Password"
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    FilledButton(
+                      onPressed: () async{
+                        final email = _email.text;
+                        final password = _password.text;
+                        try{
+                          final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                              email: email,
+                              password: password
+                          );
+                          Navigator.of(context).pushNamedAndRemoveUntil('/home/', (route) => false);
+                        }
+                        on FirebaseAuthException catch (e){
+                          if (e.code == 'invalid-credential') {
+                            Fluttertoast.showToast(msg: "Make sure you typed your email and password correctly!");
+                          }
+                          else if(e.code == 'invalid-email') {
+                            Fluttertoast.showToast(msg: "This isn't an Email!");
+                          }
+                        }
+                        },
+                      child: const Text("Login"),
+                    ),
+                    const SizedBox(height: 15),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamedAndRemoveUntil('/register/', (route) => false);
+                        },
+                      child: const Text("Not registered? Register here!"),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          default:
+            return const Text("Loading...");
+        }
+        },
     );
   }
 }

@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../firebase_options.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -31,13 +29,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      ),
-      builder: (context, snapshot) {
-        switch(snapshot.connectionState) {
-          case ConnectionState.done:
             return Scaffold(
               appBar: AppBar(
                 title: const Center(child: Text("Login"),),
@@ -86,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
                               email: email,
                               password: password
                           );
-                          Navigator.of(context).pushNamedAndRemoveUntil('/home/', (route) => false);
+                          Navigator.of(context).pushNamedAndRemoveUntil('/main/', (route) => false);
                         }
                         on FirebaseAuthException catch (e){
                           if (e.code == 'invalid-credential') {
@@ -110,10 +101,5 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
             );
-          default:
-            return const Text("Loading...");
         }
-        },
-    );
   }
-}

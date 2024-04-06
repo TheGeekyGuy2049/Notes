@@ -1,4 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/Views/main_view.dart';
+import 'package:notes/Views/register_view.dart';
+import 'package:notes/Views/verify_view.dart';
+import '../firebase_options.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,12 +16,29 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text("Home Page")),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    return FutureBuilder(
+      future: Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
       ),
-      body: const Text("Welcome to Notes!"),
+      builder: (context, snapshot) {
+        switch(snapshot.connectionState) {
+          case ConnectionState.done:
+            final user = FirebaseAuth.instance.currentUser;
+            if (user !=null) {
+              if (user.emailVerified) {
+                return const MainPage();
+              }
+              else {
+                return const VerfiyEmailView();
+              }
+            }
+            else {
+              return const RegisterView();
+            }
+          default:
+            return const Text("Loading...");
+        }
+      },
     );
   }
 }

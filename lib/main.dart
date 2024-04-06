@@ -4,6 +4,7 @@ import 'package:notes/Views/register_view.dart';
 import 'package:notes/Views/verify_view.dart';
 import 'package:notes/Views/login_view.dart';
 import 'package:notes/Views/home_view.dart';
+import 'Views/main_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,18 +16,20 @@ void main() {
             colorScheme: darkColorScheme ?? defaultLightColorScheme,
             useMaterial3: true,
           ),
-          home:  const LoginView(),
+          home:  const HomePage(),
           routes: {
             '/register/': (context) => const RegisterView(),
             '/verify/': (context) => const VerfiyEmailView(),
             '/login/': (context) => const LoginView(),
             '/home/': (context) => const HomePage(),
+            '/main/': (context) => const MainPage(),
           },
         );
       }
-      )
+      ),
   );
 }
+
 
 
 

@@ -36,7 +36,11 @@ class _HomePageState extends State<HomePage> {
               return const RegisterView();
             }
           default:
-            return const Text("Loading...");
+            return const Center(
+                child: SizedBox(
+                    child: CircularProgressIndicator()
+                )
+            );
         }
       },
     );

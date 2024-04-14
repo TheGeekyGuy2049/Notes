@@ -8,14 +8,18 @@ import 'Views/main_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final defaultLightColorScheme = ColorScheme.fromSwatch(primarySwatch: Colors.blue);
   runApp(
       DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme){
         return MaterialApp(
           theme: ThemeData(
-            colorScheme: darkColorScheme ?? defaultLightColorScheme,
+            colorScheme: lightColorScheme,
             useMaterial3: true,
           ),
+          darkTheme: ThemeData(
+            colorScheme: darkColorScheme,
+            useMaterial3: true,
+          ),
+          themeMode: ThemeMode.system,
           home:  const HomePage(),
           routes: {
             '/register/': (context) => const RegisterView(),
@@ -29,6 +33,8 @@ void main() {
       ),
   );
 }
+
+
 
 
 

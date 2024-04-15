@@ -13,12 +13,21 @@ class _RegisterViewState extends State<RegisterView> {
 
   late final TextEditingController _email;
   late final TextEditingController _password;
+  bool _obscured = false;
 
   @override
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
+  }
+
+  void _toggleObscured() {
+    setState(
+            () {
+          _obscured = !_obscured;
+        }
+    );
   }
 
   @override
@@ -56,14 +65,15 @@ class _RegisterViewState extends State<RegisterView> {
             ),
             const SizedBox(height: 15),
             TextField(
-              obscureText: true,
+              obscureText: _obscured,
               enableSuggestions: false,
               autocorrect: false,
               controller: _password,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   filled: true,
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.password),
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.password),
+                  suffixIcon: IconButton(onPressed: ()=> _toggleObscured(), icon: _obscured ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off)),
                   labelText: "Password",
                   hintText: "Password"
               ),

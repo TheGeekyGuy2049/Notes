@@ -21,14 +21,6 @@ class _LoginViewState extends State<LoginView> {
     super.initState();
   }
 
-  void _toggleObscured() {
-    setState(
-            () {
-      _obscured = !_obscured;
-    }
-    );
-  }
-
   @override
   void dispose() {
     _email.dispose();
@@ -64,6 +56,7 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     const SizedBox(height: 15),
                     TextField(
+                      enableInteractiveSelection: false,
                       obscureText: _obscured,
                       enableSuggestions: false,
                       autocorrect: false,
@@ -72,7 +65,21 @@ class _LoginViewState extends State<LoginView> {
                           filled: true,
                           border: const OutlineInputBorder(),
                           prefixIcon: const Icon(Icons.password),
-                          suffixIcon: IconButton(onPressed: ()=> _toggleObscured(), icon: _obscured ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off)),
+                          suffixIcon: GestureDetector(
+                            onLongPressStart: (_){
+                              setState(() {
+                                _obscured = false;
+                              });
+                          },
+                            onLongPressEnd: (_) {
+                              setState(() {
+                                _obscured = true;
+                              });
+                            },
+                            child: Icon(
+                              _obscured ? Icons.visibility_off : Icons.visibility,
+                            ),
+                          ),
                           labelText: "Password",
                           hintText: "Password"
                       ),

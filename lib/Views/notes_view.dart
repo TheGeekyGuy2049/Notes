@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage> {
             {
               switch (value) {
                 case MenuAction.logout:
-                  final shouldLogOut = await ShowLogOutDialog(context);
+                  final shouldLogOut = await showLogOutDialog(context);
                   if(shouldLogOut){
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false);
@@ -48,7 +48,7 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-Future<bool>ShowLogOutDialog(BuildContext context){
+Future<bool>showLogOutDialog(BuildContext context){
   return showDialog<bool>(
       context: context,
       builder: (context){

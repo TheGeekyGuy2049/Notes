@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:notes/Services/Auth/auth_service.dart';
+import '../Services/Auth/auth_exceptions.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -91,23 +92,21 @@ class _RegisterViewState extends State<RegisterView> {
                 final email = _email.text;
                 final password = _password.text;
                 try{
-                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  await AuthService.firebase().createUser(
                       email: email,
                       password: password
                   );
                   Navigator.of(context).pushNamedAndRemoveUntil('/verify/', (route) => false);
                 }
-                on FirebaseAuthException catch (e){
-                  if (e.code == 'invalid-email') {
+                on InvalidEmailAuthException {
                     Fluttertoast.showToast(msg: "This isn't an Email!");
                   }
-                  else if(e.code == 'email-already-in-use') {
+                  on AlreadyUsedEmailAuthException {
                     Fluttertoast.showToast(msg: "Email already in use!!");
                   }
-                  else if(e.code == 'weak-password') {
+                  on WeakPasswordAuthException {
                     Fluttertoast.showToast(msg: "Choose a stronger password!");
                   }
-                };
                 },
               child: const Text("Register"),
             ),

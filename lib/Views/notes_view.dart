@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/Services/Auth/auth_service.dart';
 
 enum MenuAction {logout}
 
@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> {
                 case MenuAction.logout:
                   final shouldLogOut = await showLogOutDialog(context);
                   if(shouldLogOut){
-                    await FirebaseAuth.instance.signOut();
+                    await AuthService.firebase().logOut();
                     Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false);
                   }
               }

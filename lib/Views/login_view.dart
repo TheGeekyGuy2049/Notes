@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:notes/Services/Auth/auth_service.dart';
+import '../Services/Auth/auth_exceptions.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -90,19 +91,17 @@ class _LoginViewState extends State<LoginView> {
                         final email = _email.text;
                         final password = _password.text;
                         try{
-                          final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                         AuthService.firebase().logIn(
                               email: email,
                               password: password
                           );
                           Navigator.of(context).pushNamedAndRemoveUntil('/main/', (route) => false);
                         }
-                        on FirebaseAuthException catch (e){
-                          if (e.code == 'invalid-credential') {
-                            Fluttertoast.showToast(msg: "Make sure you typed your email and password correctly!");
-                          }
-                          else if(e.code == 'invalid-email') {
-                            Fluttertoast.showToast(msg: "This isn't an Email!");
-                          }
+                        on InvalidCredentialsAuthException {
+                          Fluttertoast.showToast(msg: "Make sure you typed your email and password correctly!");
+                        }
+                        on InvalidEmailAuthException {
+                          Fluttertoast.showToast(msg: "This isn't an Email!");
                         }
                         },
                       child: const Text("Login"),

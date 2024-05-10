@@ -102,11 +102,13 @@ class _RegisterViewState extends State<RegisterView> {
                     Fluttertoast.showToast(msg: "This isn't an Email!");
                   }
                   on AlreadyUsedEmailAuthException {
-                    Fluttertoast.showToast(msg: "Email already in use!!");
+                    Fluttertoast.showToast(msg: "Email already in use!");
                   }
                   on WeakPasswordAuthException {
                     Fluttertoast.showToast(msg: "Choose a stronger password!");
                   }
+                  on GenericExceptionsAuthException {
+                }
                 },
               child: const Text("Register"),
             ),

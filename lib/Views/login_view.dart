@@ -91,17 +91,16 @@ class _LoginViewState extends State<LoginView> {
                         final email = _email.text;
                         final password = _password.text;
                         try{
-                         AuthService.firebase().logIn(
+                         await AuthService.firebase().logIn(
                               email: email,
-                              password: password
+                              password: password,
                           );
                           Navigator.of(context).pushNamedAndRemoveUntil('/main/', (route) => false);
                         }
-                        on InvalidCredentialsAuthException {
+                        on WrongEmailOrPasswordAuthException {
                           Fluttertoast.showToast(msg: "Make sure you typed your email and password correctly!");
                         }
-                        on InvalidEmailAuthException {
-                          Fluttertoast.showToast(msg: "This isn't an Email!");
+                        on GenericExceptionsAuthException {
                         }
                         },
                       child: const Text("Login"),

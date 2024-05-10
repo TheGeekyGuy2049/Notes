@@ -3,11 +3,16 @@ import 'package:notes/Services/Auth/auth_user.dart';
 import 'package:notes/Services/Auth/auth_provider.dart';
 import 'package:notes/Services/Auth/auth_exceptions.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, FirebaseAuthException;
-
 import '../../firebase_options.dart';
 
 
 class FirebaseAuthProvider implements AuthProvider {
+  @override
+  Future<void> initialize() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
   @override
   Future<AuthUser> createUser({
     required String email,
@@ -73,10 +78,7 @@ class FirebaseAuthProvider implements AuthProvider {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-credential') {
-        throw InvalidCredentialsAuthException();
-      }
-      else if(e.code == 'invalid-email') {
-        throw InvalidEmailAuthException();
+        throw WrongEmailOrPasswordAuthException();
       }
       else {
         throw GenericExceptionsAuthException();
@@ -107,12 +109,4 @@ class FirebaseAuthProvider implements AuthProvider {
       throw UserNotLoggedInAuthException();
     }
   }
-
-  @override
-  Future<void> initialize() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
-  
 }
